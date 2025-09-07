@@ -1,31 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:customer_app/config/app_color/app_color.dart';
 import 'package:customer_app/preferences/app_preferences.dart';
 import 'package:customer_app/preferences/preferences_key.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 mixin AppTheme {
   static ThemeData lightTheme = ThemeData(
-    fontFamily: 'DMSans',
+    // fontFamily: 'DMSans',
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
-    highlightColor: AppColors.black,
-    applyElevationOverlayColor: true,
-    secondaryHeaderColor: AppColors.red,
+    // applyElevationOverlayColor: true,
+    // secondaryHeaderColor: AppColors.red,
     scaffoldBackgroundColor: AppColors.white,
-    // focusColor: AppColors.black1.withValues(alpha: 0.38),
-    splashColor: AppColors.grey1,
-    cardColor: AppColors.card,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.light,
-      errorContainer: Colors.grey.shade300,
-      inversePrimary: Colors.grey.shade100,
-      inverseSurface: AppColors.grey3,
-    ),
-    canvasColor: Colors.red.shade300,
-    iconTheme: const IconThemeData(color: AppColors.grey),
-
+    // splashColor: AppColors.grey1,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
@@ -56,21 +43,31 @@ mixin AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         textStyle: WidgetStateProperty.all(
-          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         backgroundColor: WidgetStateProperty.all(AppColors.primary),
-
-        minimumSize: WidgetStateProperty.all(Size.fromHeight(50)),
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.pressed)) {
+            // ignore: deprecated_member_use
+            return AppColors.grey1.withOpacity(0.2); // pressed ripple
+          }
+          if (states.contains(WidgetState.hovered)) {
+            // ignore: deprecated_member_use
+            return AppColors.grey1.withOpacity(0.1); // hover effect
+          }
+          return null; // default
+        }),
+        minimumSize: WidgetStateProperty.all(const Size.fromHeight(50)),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     ),
-    drawerTheme: const DrawerThemeData(
-      backgroundColor: Color(0xffF5F7F9),
-      elevation: 0,
-    ),
 
+    // drawerTheme: const DrawerThemeData(
+    //   backgroundColor: Color(0xffF5F7F9),
+    //   elevation: 0,
+    // ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.white,
@@ -90,80 +87,80 @@ mixin AppTheme {
     ),
   );
 
-  static ThemeData darkTheme = ThemeData(
-    fontFamily: 'DMSans',
-    brightness: Brightness.dark,
-    primaryColor: AppColors.primary,
-    highlightColor: AppColors.white,
-    applyElevationOverlayColor: true,
-    secondaryHeaderColor: AppColors.red,
-    scaffoldBackgroundColor: AppColors.black,
-    focusColor: AppColors.grey2,
-    cardColor: const Color(0xFF1E1E1E),
-    canvasColor: Colors.red.shade300,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.dark,
-      errorContainer: Colors.grey.shade700,
-      inversePrimary: Colors.grey.shade800,
-      inverseSurface: AppColors.black1,
-    ),
-    iconTheme: IconThemeData(color: Colors.grey.shade800),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF1E1E1E),
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: true,
-      iconTheme: IconThemeData(color: AppColors.white),
-      titleTextStyle: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: AppColors.white,
-        fontFamily: 'DMSans',
-      ),
-    ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-      headlineMedium: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        color: AppColors.white,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: AppColors.white,
-      ),
-      bodyLarge: TextStyle(fontSize: 16, color: AppColors.white),
-      bodyMedium: TextStyle(fontSize: 14, color: Colors.grey),
-    ),
-    drawerTheme: DrawerThemeData(
-      backgroundColor: Colors.grey.shade800,
-      elevation: 0,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        textStyle: WidgetStateProperty.all(
-          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: WidgetStateProperty.all(Colors.green.shade500),
-        foregroundColor: WidgetStateProperty.all(Colors.black),
+  // static ThemeData darkTheme = ThemeData(
+  //   fontFamily: 'DMSans',
+  //   brightness: Brightness.dark,
+  //   primaryColor: AppColors.primary,
+  //   highlightColor: AppColors.white,
+  //   applyElevationOverlayColor: true,
+  //   secondaryHeaderColor: AppColors.red,
+  //   scaffoldBackgroundColor: AppColors.black,
+  //   focusColor: AppColors.grey2,
+  //   cardColor: const Color(0xFF1E1E1E),
+  //   canvasColor: Colors.red.shade300,
+  //   colorScheme: ColorScheme.fromSeed(
+  //     seedColor: AppColors.primary,
+  //     brightness: Brightness.dark,
+  //     errorContainer: Colors.grey.shade700,
+  //     inversePrimary: Colors.grey.shade800,
+  //     inverseSurface: AppColors.black1,
+  //   ),
+  //   iconTheme: IconThemeData(color: Colors.grey.shade800),
+  //   appBarTheme: const AppBarTheme(
+  //     backgroundColor: Color(0xFF1E1E1E),
+  //     surfaceTintColor: Colors.transparent,
+  //     elevation: 0,
+  //     centerTitle: true,
+  //     iconTheme: IconThemeData(color: AppColors.white),
+  //     titleTextStyle: TextStyle(
+  //       fontSize: 20,
+  //       fontWeight: FontWeight.w700,
+  //       color: AppColors.white,
+  //       fontFamily: 'DMSans',
+  //     ),
+  //   ),
+  //   textTheme: const TextTheme(
+  //     headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+  //     headlineMedium: TextStyle(
+  //       fontSize: 24,
+  //       fontWeight: FontWeight.w600,
+  //       color: AppColors.white,
+  //     ),
+  //     labelSmall: TextStyle(
+  //       fontSize: 14,
+  //       fontWeight: FontWeight.w400,
+  //       color: AppColors.white,
+  //     ),
+  //     bodyLarge: TextStyle(fontSize: 16, color: AppColors.white),
+  //     bodyMedium: TextStyle(fontSize: 14, color: Colors.grey),
+  //   ),
+  //   drawerTheme: DrawerThemeData(
+  //     backgroundColor: Colors.grey.shade800,
+  //     elevation: 0,
+  //   ),
+  //   elevatedButtonTheme: ElevatedButtonThemeData(
+  //     style: ButtonStyle(
+  //       textStyle: WidgetStateProperty.all(
+  //         TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+  //       ),
+  //       backgroundColor: WidgetStateProperty.all(Colors.green.shade500),
+  //       foregroundColor: WidgetStateProperty.all(Colors.black),
 
-        minimumSize: WidgetStateProperty.all(Size.fromHeight(50)),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      ),
-    ),
+  //       minimumSize: WidgetStateProperty.all(Size.fromHeight(50)),
+  //       shape: WidgetStateProperty.all(
+  //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //       ),
+  //     ),
+  //   ),
 
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      isDense: true,
-      fillColor: AppColors.black1,
-      prefixIconColor: AppColors.red.withValues(alpha: 0.048),
-      hintStyle: TextStyle(color: AppColors.grey1),
-    ),
-  );
+  //   inputDecorationTheme: InputDecorationTheme(
+  //     filled: true,
+  //     isDense: true,
+  //     fillColor: AppColors.black1,
+  //     prefixIconColor: AppColors.red.withValues(alpha: 0.048),
+  //     hintStyle: TextStyle(color: AppColors.grey1),
+  //   ),
+  // );
 }
 
 class ThemeProvider extends GetxController {

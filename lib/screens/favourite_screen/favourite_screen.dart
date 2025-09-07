@@ -1,45 +1,22 @@
-import 'package:customer_app/config/app_color/app_color.dart';
 import 'package:customer_app/config/app_constant/app_assets.dart';
 import 'package:customer_app/config/app_constant/app_enum.dart';
 import 'package:customer_app/config/utils/app_padding.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
-import 'package:customer_app/screens/home_screen/home_screen_cnt.dart';
-import 'package:customer_app/screens/qr_code_scanner/qr_code_scanner_screen.dart';
+import 'package:customer_app/screens/favourite_screen/favourite_screen_cnt.dart';
+import 'package:customer_app/screens/home_screen/home_screen.dart';
 import 'package:customer_app/shared/business_card.dart';
-import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class FavouriteScreen extends StatelessWidget {
+  const FavouriteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    HomeScreenCnt cnt = Get.put(HomeScreenCnt());
+    FavouriteScreenCnt cnt = Get.put(FavouriteScreenCnt());
     return Scaffold(
-      appBar: buildAppBar(
-        title: 'Followed Business',
-        action: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_none, color: AppColors.primary),
-          ),
-          IconButton(
-            onPressed: () {
-              Future<void> openScanner() async {
-                final result = await Get.to<String>(
-                  () => const QrScannerScreen(), 
-                );   
-                if (result != null) {
-                  cnt.lastScan.value = result;
-                }
-              }
-            },
-            icon: Icon(Icons.qr_code_scanner, color: AppColors.primary),
-          ),
-        ],
-      ),
+      appBar: buildAppBar(title: 'Favourite Business'),
       body: SafeArea(
         child: Column(
           children: [
@@ -82,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                           category: 'Fashion',
                           rating: 4.5,
                           isOpen: false,
-                          isFavourite: false,
+                          isFavourite: true,
                           imageProvider: AssetImage(shopImage),
                           onTap: () {
                             // navigate to details
@@ -95,41 +72,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ListItemDesign extends StatelessWidget {
-  const ListItemDesign({
-    super.key,
-    required this.isSelected,
-    this.onTap,
-    required this.title,
-  });
-
-  final bool isSelected;
-  final VoidCallback? onTap;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 10),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : AppColors.grey,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: AppText(
-            text: title,
-            color: isSelected ? AppColors.white : AppColors.black,
-            fontWeight: isSelected ? appBoldFont : null,
-          ),
         ),
       ),
     );

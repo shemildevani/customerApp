@@ -1,3 +1,4 @@
+import 'package:customer_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:customer_app/config/app_constant/app_string.dart';
@@ -11,7 +12,8 @@ import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:customer_app/shared/widgets/getback.dart';
 
 class UserDataScreen extends StatelessWidget {
-  const UserDataScreen({super.key});
+  const UserDataScreen({super.key,this.user});
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {

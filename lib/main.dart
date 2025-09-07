@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
 
       theme: AppTheme.lightTheme,
       home: LoginScreen(),
-    );
+    ); 
   }
 }

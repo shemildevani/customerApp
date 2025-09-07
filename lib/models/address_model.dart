@@ -5,6 +5,7 @@ class AddressModel {
   final String state;
   final String pincode;
   final String? country;
+  final String? area;
 
   AddressModel({
     required this.addressLine1,
@@ -13,6 +14,7 @@ class AddressModel {
     required this.state,
     this.country,
     required this.pincode,
+    required this.area,
   });
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class AddressModel {
       state: json['state'] ?? '',
       pincode: json['pincode'] ?? '',
       country: json['country'],
+      area: json['area'],
     );
   }
 
@@ -33,6 +36,8 @@ class AddressModel {
       'city': city,
       'state': state,
       'pincode': pincode,
+      'country': country,
+      'area': area,
     };
   }
 }
