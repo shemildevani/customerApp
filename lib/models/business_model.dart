@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:customer_app/models/address_model.dart';
+import 'package:customer_app/models/day_timing_model.dart';
 import 'package:customer_app/models/user_model.dart';
 
 class BusinessModel {
@@ -17,13 +17,12 @@ class BusinessModel {
   final String googleMapURL;
   final String instagramAccountLink;
   final String facebookAccountLink;
-  final String openTime;
-  final String closeTime;
-  final List<String> dayOff;
   final double ratings;
   final bool isOpen;
   final bool isVerified;
   final List<UserModel>? businessOwners;
+  final List<DayTiming>? businessTimings;
+  final String? businessUpiId;
 
   BusinessModel({
     required this.id,
@@ -39,13 +38,12 @@ class BusinessModel {
     required this.googleMapURL,
     required this.instagramAccountLink,
     required this.facebookAccountLink,
-    required this.openTime,
-    required this.closeTime,
-    required this.dayOff,
+    this.businessTimings,
     this.ratings = 0.0,
     this.isOpen = false,
     this.isVerified = false,
     this.businessOwners,
+    this.businessUpiId,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic> json) {
@@ -63,9 +61,10 @@ class BusinessModel {
       googleMapURL: json['googleMapURL'] ?? '',
       instagramAccountLink: json['instagramAccountLink'] ?? '',
       facebookAccountLink: json['facebookAccountLink'] ?? '',
-      openTime: json['openTime'] ?? '',
-      closeTime: json['closeTime'] ?? '',
-      dayOff: List<String>.from(json['dayOff'] ?? []),
+      businessTimings:
+          (json['businessTimings'] as List<dynamic>?)
+              ?.map((e) => DayTiming.fromJson(e as Map<String, dynamic>))
+              .toList(),
       ratings: (json['ratings'] as num?)?.toDouble() ?? 0.0,
       isOpen: json['isOpen'] ?? false,
       isVerified: json['isVerified'] ?? false,
@@ -73,6 +72,7 @@ class BusinessModel {
           (json['businessOwners'] as List<dynamic>?)
               ?.map((e) => UserModel.fromOwnerJson(e as Map<String, dynamic>))
               .toList(),
+      businessUpiId: json['businessUpiId'],
     );
   }
 
@@ -91,14 +91,14 @@ class BusinessModel {
       'googleMapURL': googleMapURL,
       'instagramAccountLink': instagramAccountLink,
       'facebookAccountLink': facebookAccountLink,
-      'openTime': openTime,
-      'closeTime': closeTime,
-      'dayOff': dayOff,
+      'businessTimings':
+          businessTimings?.map((timing) => timing.toJson()).toList() ?? [],
       'ratings': ratings,
       'isOpen': isOpen,
       'isVerified': isVerified,
       'businessOwners':
           businessOwners?.map((owner) => owner.toJson()).toList() ?? [],
+      'businessUpiId': businessUpiId,
     };
   }
 }
