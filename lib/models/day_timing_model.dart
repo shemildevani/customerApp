@@ -28,19 +28,3 @@ class DayTiming {
     };
   }
 }
-
-class BusinessWeekTiming {
-  final List<DayTiming> timings;
-
-  BusinessWeekTiming({required this.timings});
-
-  factory BusinessWeekTiming.fromJson(List<dynamic> json) {
-    return BusinessWeekTiming(
-      timings: json.map((e) => DayTiming.fromJson(e)).toList(),
-    );
-  }
-
-  List<Map<String, dynamic>> toJson() {
-    return timings.map((e) => e.toJson()).toList();
-  }
-}

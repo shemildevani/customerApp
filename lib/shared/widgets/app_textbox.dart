@@ -1,7 +1,7 @@
+import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart' show FaIcon;
 import 'package:customer_app/config/app_color/app_color.dart';
-import 'package:customer_app/config/app_constant/app_assets.dart';
 import 'package:customer_app/config/app_constant/app_font_size.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
 import 'package:customer_app/shared/widgets/required_label.dart';

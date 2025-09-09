@@ -1,4 +1,4 @@
-import 'package:customer_app/config/app_constant/app_assets.dart';
+import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:customer_app/screens/favourite_screen/favourite_screen.dart';
 import 'package:customer_app/screens/home_screen/home_screen.dart';
 import 'package:customer_app/screens/profile_screen/profile_screen.dart';

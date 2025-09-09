@@ -1,10 +1,11 @@
 import 'package:customer_app/config/app_color/app_color.dart';
 import 'package:customer_app/config/app_constant/app_assets.dart';
+import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:customer_app/config/app_constant/app_enum.dart';
 import 'package:customer_app/config/utils/app_padding.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
+import 'package:customer_app/screens/business_preview/business_screen.dart';
 import 'package:customer_app/screens/home_screen/home_screen_cnt.dart';
-import 'package:customer_app/screens/qr_code_scanner/qr_code_scanner_screen.dart';
 import 'package:customer_app/shared/business_card.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
@@ -27,14 +28,14 @@ class HomeScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Future<void> openScanner() async {
-                final result = await Get.to<String>(
-                  () => const QrScannerScreen(), 
-                );   
-                if (result != null) {
-                  cnt.lastScan.value = result;
-                }
-              }
+              // Future<void> openScanner() async {
+              //   final result = await Get.to<String>(
+              //     () => const QrScannerScreen(),
+              //   );
+              //   if (result != null) {
+              //     cnt.lastScan.value = result;
+              //   }
+              // }
             },
             icon: Icon(Icons.qr_code_scanner, color: AppColors.primary),
           ),
@@ -86,6 +87,7 @@ class HomeScreen extends StatelessWidget {
                           imageProvider: AssetImage(shopImage),
                           onTap: () {
                             // navigate to details
+                            Get.to(() => BusinessScreen());
                           },
                         );
                       }, childCount: 5),
