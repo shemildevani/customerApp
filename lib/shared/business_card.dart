@@ -182,7 +182,10 @@ class BusinessCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: imageProvider,
+                        image:
+                            isOpen
+                                ? imageProvider
+                                : AssetImage(closedShopImage),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -192,25 +195,19 @@ class BusinessCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AppText(
-                                text: 'm2m',
-                                textAlign: TextAlign.start,
-                                fontSize: AppFontSize.s16,
-                                softWrap: true,
-                                fontWeight: appBoldFont,
-                                maxLines: 1,
-                                overFlow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            BusinessOpenClosedStatus(
-                              isOpen: isOpen,
-                              fontSize: AppFontSize.s10,
-                            ),
-                          ],
+                        AppText(
+                          text: 'm2m',
+                          textAlign: TextAlign.start,
+                          fontSize: AppFontSize.s16,
+                          softWrap: true,
+                          fontWeight: appBoldFont,
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
                         ),
+                        // BusinessOpenClosedStatus(
+                        //   isOpen: isOpen,
+                        //   fontSize: AppFontSize.s10,
+                        // ),
                         AppSpacing.h6,
 
                         Row(
@@ -281,7 +278,10 @@ class BusinessCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child:isFavourite?Icon(Icons.favorite,color: Colors.pink,): Icon(Icons.favorite_border_outlined),
+                    child:
+                        isFavourite
+                            ? Icon(Icons.favorite, color: Colors.pink)
+                            : Icon(Icons.favorite_border_outlined),
                   ),
                 ),
               ),
@@ -292,3 +292,8 @@ class BusinessCard extends StatelessWidget {
     );
   }
 }
+
+
+
+
+

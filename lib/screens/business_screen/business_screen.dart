@@ -5,20 +5,29 @@ import 'package:customer_app/config/utils/app_padding.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
 import 'package:customer_app/models/day_timing_model.dart';
 import 'package:customer_app/models/user_model.dart';
-import 'package:customer_app/screens/business_preview/widgets/business_address_widget.dart';
-import 'package:customer_app/screens/business_preview/widgets/business_owner_section.dart';
-import 'package:customer_app/screens/business_preview/widgets/business_website.dart';
-import 'package:customer_app/screens/business_preview/widgets/ongoing_offers_card.dart';
-import 'package:customer_app/screens/business_preview/widgets/opening_hour_widget.dart';
+import 'package:customer_app/screens/business_screen/business_screen_cnt.dart';
+import 'package:customer_app/screens/business_screen/widgets/business_address_widget.dart';
+import 'package:customer_app/screens/business_screen/widgets/business_owner_section.dart';
+import 'package:customer_app/screens/business_screen/widgets/business_website.dart';
+import 'package:customer_app/screens/business_screen/widgets/ongoing_offers_card.dart';
+import 'package:customer_app/screens/business_screen/widgets/opening_hour_widget.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:customer_app/shared/widgets/business_open_closed_status.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
-class BusinessScreen extends StatelessWidget {
+class BusinessScreen extends StatefulWidget {
   const BusinessScreen({super.key});
+
+  @override
+  State<BusinessScreen> createState() => _BusinessScreenState();
+}
+
+class _BusinessScreenState extends State<BusinessScreen> {
+  final cnt = Get.put(BusinessScreenCnt());
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +44,7 @@ class BusinessScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: const [
+            children: [
               _OngoingOffersSection(),
               _HeaderSection(),
               _CoreInfoSection(),
@@ -327,12 +336,12 @@ class _ImagesSection extends StatelessWidget {
             ),
           ],
         ),
-        
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12,right: 12),
+              padding: const EdgeInsets.only(left: 12, top: 12, right: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -347,11 +356,12 @@ class _ImagesSection extends StatelessWidget {
 
                     child: InkWell(
                       borderRadius: BorderRadius.circular(8),
-                      onTap: (){
-                                  
-                      },
+                      onTap: () {},
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 4,
+                        ),
                         child: AppText(
                           text: 'See All',
                           color: AppColors.primary,
@@ -361,13 +371,12 @@ class _ImagesSection extends StatelessWidget {
                       ),
                     ),
                   ),
-                 
                 ],
               ),
             ),
             AppSpacing.h14,
             Padding(
-             padding: const EdgeInsets.only(left: 12, bottom: 12),
+              padding: const EdgeInsets.only(left: 12, bottom: 12),
               child: SizedBox(
                 height: 100,
                 child: ListView.builder(
@@ -579,32 +588,53 @@ class _FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.primary,
-      borderRadius: BorderRadius.circular(12),
-      elevation: 2,
-      child: InkWell(
+    final cnt = Get.find<BusinessScreenCnt>();
+
+    return Obx(
+      () => Material(
+        color: cnt.isFollowed.value ? AppColors.white : AppColors.primary,
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          // TODO: follow/unfollow logic
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          child: Row(
-            children: [
-              const Icon(
-                FontAwesomeIcons.userPlus,
-                color: AppColors.white,
-                size: 16,
+
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            cnt.isFollowed.value = !cnt.isFollowed.value;
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: cnt.isFollowed.value
+                    ? AppColors.primary
+                    : AppColors.transparent,
+                width: 1.5,
               ),
-              AppSpacing.w8,
-              AppText(
-                text: 'Follow',
-                color: AppColors.white,
-                fontSize: AppFontSize.s16,
-                fontWeight: appBoldFont,
-              ),
-            ],
+              borderRadius: BorderRadius.circular(12),
+              color: cnt.isFollowed.value
+                  ? AppColors.white
+                  : AppColors.primary,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(
+              children: [
+                if (!cnt.isFollowed.value) ...[
+                  const Icon(
+                    FontAwesomeIcons.userPlus,
+                    color: AppColors.white,
+                    size: 16,
+                  ),
+                  AppSpacing.w8,
+                ],
+                AppText(
+                  text: cnt.isFollowed.value ? 'Following' : 'Follow',
+                  color:
+                      cnt.isFollowed.value
+                          ? AppColors.primary
+                          : AppColors.white,
+                  fontSize: AppFontSize.s16,
+                  fontWeight: appBoldFont,
+                ),
+              ],
+            ),
           ),
         ),
       ),

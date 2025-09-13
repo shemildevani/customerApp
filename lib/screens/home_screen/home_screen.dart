@@ -4,8 +4,10 @@ import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:customer_app/config/app_constant/app_enum.dart';
 import 'package:customer_app/config/utils/app_padding.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
-import 'package:customer_app/screens/business_preview/business_screen.dart';
+import 'package:customer_app/screens/business_screen/business_screen.dart';
 import 'package:customer_app/screens/home_screen/home_screen_cnt.dart';
+import 'package:customer_app/screens/home_screen/shimmer_widget/business_list_shimmer.dart';
+import 'package:customer_app/screens/qr_code_scanner/qr_code_scanner_screen.dart';
 import 'package:customer_app/shared/business_card.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
@@ -23,19 +25,14 @@ class HomeScreen extends StatelessWidget {
         title: 'Followed Business',
         action: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              cnt.getBusinessList();
+            },
             icon: Icon(Icons.notifications_none, color: AppColors.primary),
           ),
           IconButton(
             onPressed: () {
-              // Future<void> openScanner() async {
-              //   final result = await Get.to<String>(
-              //     () => const QrScannerScreen(),
-              //   );
-              //   if (result != null) {
-              //     cnt.lastScan.value = result;
-              //   }
-              // }
+              Get.to(() => QrCodeScannerScreen());
             },
             icon: Icon(Icons.qr_code_scanner, color: AppColors.primary),
           ),
@@ -67,33 +64,38 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            AppSpacing.h8,
+            AppSpacing.h12,
             Expanded(
               child: Padding(
-                padding: AppPadding.appPadding,
+                padding: AppPadding.horizontal16,
 
-                child: CustomScrollView(
-                  shrinkWrap: true,
+                child: Obx(() {
+                  if (cnt.isLoading.value) {
+                    return BusinessListShimmerLoader();
+                  }
+                  return CustomScrollView(
+                    shrinkWrap: true,
 
-                  slivers: [
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        return BusinessCard(
-                          name: 'Business $index',
-                          category: 'Fashion',
-                          rating: 4.5,
-                          isOpen: false,
-                          isFavourite: false,
-                          imageProvider: AssetImage(shopImage),
-                          onTap: () {
-                            // navigate to details
-                            Get.to(() => BusinessScreen());
-                          },
-                        );
-                      }, childCount: 5),
-                    ),
-                  ],
-                ),
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return BusinessCard(
+                            name: 'Business $index',
+                            category: 'Fashion',
+                            rating: 4.5,
+                            isOpen: false,
+                            isFavourite: false,
+                            imageProvider: AssetImage(shopImage),
+                            onTap: () {
+                              // navigate to details
+                              Get.to(() => BusinessScreen());
+                            },
+                          );
+                        }, childCount: 5),
+                      ),
+                    ],
+                  );
+                }),
               ),
             ),
           ],

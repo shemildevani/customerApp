@@ -12,7 +12,7 @@ import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:customer_app/shared/widgets/getback.dart';
 
 class UserDataScreen extends StatelessWidget {
-  const UserDataScreen({super.key,this.user});
+  const UserDataScreen({super.key, this.user});
   final UserModel? user;
 
   @override

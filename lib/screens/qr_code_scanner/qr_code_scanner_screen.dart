@@ -1,241 +1,317 @@
+import 'dart:math' as math;
+import 'package:customer_app/config/app_color/app_color.dart';
+import 'package:customer_app/screens/business_screen/business_screen.dart';
+import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({super.key});
+class QrCodeScannerScreen extends StatefulWidget {
+  const QrCodeScannerScreen({super.key});
 
   @override
-  State<QrScannerScreen> createState() => _QrScannerScreenState();
+  State<QrCodeScannerScreen> createState() => _QrCodeScannerScreenState();
 }
 
-class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
-  final MobileScannerController _controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.noDuplicates,
-    facing: CameraFacing.back,
-    torchEnabled: false,
-    formats: [BarcodeFormat.qrCode, BarcodeFormat.aztec, BarcodeFormat.dataMatrix, BarcodeFormat.pdf417, BarcodeFormat.codabar, BarcodeFormat.code39, BarcodeFormat.code93, BarcodeFormat.code128, BarcodeFormat.ean8, BarcodeFormat.ean13, BarcodeFormat.itf, BarcodeFormat.upcA, BarcodeFormat.upcE],
-  );
-
-  bool _handlingResult = false; 
-  bool _torchOn = false;  
+class _QrCodeScannerScreenState extends State<QrCodeScannerScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: false);
+    // Lock to portrait if you want
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     super.dispose();
   }
 
-  // Pause camera when app goes background; resume when foreground
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!mounted) return;
-    switch (state) {
-      case AppLifecycleState.paused:
-      case AppLifecycleState.inactive:
-        _controller.stop();
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cornerColor = AppColors.primary;
+
+    return Scaffold(
+      appBar: buildAppBar(title: 'Scan Business QR'),
+      body: Stack(
+        children: [
+          // Camera
+          Positioned.fill(
+            child: MobileScanner(
+              onDetect: (capture) {
+                if (capture.barcodes.isNotEmpty) {
+                  final String code = capture.barcodes.first.rawValue ?? '---';
+                  debugPrint('500001=======>Barcode found! $code');
+                  Get.off(() => BusinessScreen());
+                }
+              },
+              // The overlayBuilder renders *above* the camera preview
+              overlayBuilder: (context, constraints) {
+                return ScannerOverlay(
+                  constraints: constraints,
+                  animation: _controller,
+                  cornerColor: cornerColor,
+                );
+              },
+            ),
+          ),
+
+          // Optional: Small hint text at bottom
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 28,
+            child: Center(
+              child: Text(
+                'Align QR inside the frame',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Overlay with:
+/// - Dimmed background
+/// - Transparent square cutout
+/// - Corner borders
+/// - Animated center "light" (laser) line
+class ScannerOverlay extends StatelessWidget {
+  const ScannerOverlay({
+    super.key,
+    required this.constraints,
+    required this.animation,
+    this.cornerColor = Colors.blue,
+    this.borderThickness = 4,
+    this.cornerLength = 28,
+    this.cutOutRatio = 0.72, // percentage of shortest side
+    this.cutOutMin = 240,
+    this.cutOutMax = 360,
+    this.borderRadius = 16,
+  });
+
+  final BoxConstraints constraints;
+  final Animation<double> animation;
+  final Color cornerColor;
+  final double borderThickness;
+  final double cornerLength;
+  final double cutOutRatio;
+  final double cutOutMin;
+  final double cutOutMax;
+  final double borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = Size(constraints.maxWidth, constraints.maxHeight);
+    final shortest = math.min(size.width, size.height);
+    final cut = shortest * cutOutRatio;
+    final cutOutSize = cut.clamp(cutOutMin, cutOutMax);
+    final cutOutRect = Rect.fromCenter(
+      center: size.center(Offset.zero),
+      width: cutOutSize,
+      height: cutOutSize,
+    );
+
+    return RepaintBoundary(
+      child: Stack(
+        children: [
+          // Dim + hole
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _DimPainter(
+                cutOutRect: cutOutRect,
+                radius: borderRadius,
+              ),
+            ),
+          ),
+
+          // Corner borders
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _CornerPainter(
+                rect: cutOutRect,
+                color: cornerColor,
+                thickness: borderThickness,
+                length: cornerLength,
+                radius: borderRadius,
+              ),
+            ),
+          ),
+
+          // Center moving light (horizontal)
+          Positioned.fill(
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, _) {
+                // Move from top to bottom inside the cutout
+                final t = Curves.easeInOut.transform(
+                  // Make it loop smoothly: 0→1 then jump back to 0
+                  (animation.value % 1.0),
+                );
+                final y = cutOutRect.top + t * cutOutRect.height;
+
+                return CustomPaint(
+                  painter: _LaserPainter(
+                    y: y,
+                    left: cutOutRect.left,
+                    right: cutOutRect.right,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DimPainter extends CustomPainter {
+  _DimPainter({required this.cutOutRect, required this.radius});
+
+  final Rect cutOutRect;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final bg = Paint()..color = Colors.black.withOpacity(0.55);
+    final overlay = Path()..addRect(Offset.zero & size);
+    final hole =
+        Path()..addRRect(
+          RRect.fromRectAndRadius(cutOutRect, Radius.circular(radius)),
+        );
+    // Even-odd fill: draw full dim, then cut the hole out
+    final path = Path.combine(PathOperation.difference, overlay, hole);
+    canvas.drawPath(path, bg);
+  }
+
+  @override
+  bool shouldRepaint(covariant _DimPainter oldDelegate) =>
+      oldDelegate.cutOutRect != cutOutRect || oldDelegate.radius != radius;
+}
+
+class _CornerPainter extends CustomPainter {
+  _CornerPainter({
+    required this.rect,
+    required this.color,
+    required this.thickness,
+    required this.length,
+    required this.radius,
+  });
+
+  final Rect rect;
+  final Color color;
+  final double thickness;
+  final double length;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p =
+        Paint()
+          ..color = color
+          ..strokeWidth = thickness
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
+
+    // Draw rounded border outline (subtle, optional: comment out if not wanted)
+    final outline = RRect.fromRectAndRadius(rect, Radius.circular(radius));
+    canvas.drawRRect(outline, p..color = color.withOpacity(0.25));
+
+    // Reinstate strong color for corners
+    p.color = color;
+
+    // Corner lines (L-shape) at each corner
+    // Top-left
+    _drawCorner(canvas, p, rect.topLeft, Corner.topLeft);
+    // Top-right
+    _drawCorner(canvas, p, rect.topRight, Corner.topRight);
+    // Bottom-left
+    _drawCorner(canvas, p, rect.bottomLeft, Corner.bottomLeft);
+    // Bottom-right
+    _drawCorner(canvas, p, rect.bottomRight, Corner.bottomRight);
+  }
+
+  void _drawCorner(Canvas canvas, Paint p, Offset corner, Corner which) {
+    switch (which) {
+      case Corner.topLeft:
+        canvas.drawLine(corner, corner + Offset(length, 0), p);
+        canvas.drawLine(corner, corner + Offset(0, length), p);
         break;
-      case AppLifecycleState.resumed:
-        _controller.start();
+      case Corner.topRight:
+        canvas.drawLine(corner, corner + Offset(-length, 0), p);
+        canvas.drawLine(corner, corner + Offset(0, length), p);
         break;
-      case AppLifecycleState.detached:
-      case AppLifecycleState.hidden:
+      case Corner.bottomLeft:
+        canvas.drawLine(corner, corner + Offset(length, 0), p);
+        canvas.drawLine(corner, corner + Offset(0, -length), p);
+        break;
+      case Corner.bottomRight:
+        canvas.drawLine(corner, corner + Offset(-length, 0), p);
+        canvas.drawLine(corner, corner + Offset(0, -length), p);
         break;
     }
   }
 
-  Future<void> _onDetect(BarcodeCapture capture) async {
-    if (_handlingResult) return;
-    final barcode = capture.barcodes.isNotEmpty ? capture.barcodes.first : null;
-    final value = barcode?.rawValue;
-
-    if (value == null || value.isEmpty) return;
-
-    _handlingResult = true;
-    HapticFeedback.lightImpact();
-    await _controller.stop();
-
-    if (!mounted) return;
-    Navigator.of(context).pop(value);
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Full-screen camera feed
-            MobileScanner(
-              controller: _controller,
-              onDetect: _onDetect,
-            ),
-
-            // Dim overlay with cutout and titles
-            const _ScannerOverlay(),
-
-            // Bottom control bar
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 28,
-              child: SafeArea(
-                top: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _RoundButton(
-                      icon: Icons.close,
-                      onTap: () => Navigator.of(context).maybePop(),
-                    ),
-                    const SizedBox(width: 20),
-                    _RoundButton(
-                      icon: Icons.cameraswitch,
-                      onTap: () => _controller.switchCamera(),
-                    ),
-                    const SizedBox(width: 20),
-
-                    // Version-proof torch toggle (no torchState getter needed)
-                    _RoundButton(
-                      icon: _torchOn ? Icons.flash_on : Icons.flash_off,
-                      onTap: () async {
-                        try {
-                          await _controller.toggleTorch();
-                          if (mounted) setState(() => _torchOn = !_torchOn);
-                        } catch (_) {
-                          // ignore: handle if needed (e.g., show a SnackBar)
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  bool shouldRepaint(covariant _CornerPainter oldDelegate) =>
+      oldDelegate.rect != rect ||
+      oldDelegate.color != color ||
+      oldDelegate.thickness != thickness ||
+      oldDelegate.length != length ||
+      oldDelegate.radius != radius;
 }
 
-class _ScannerOverlay extends StatelessWidget {
-  const _ScannerOverlay();
+enum Corner { topLeft, topRight, bottomLeft, bottomRight }
+
+class _LaserPainter extends CustomPainter {
+  _LaserPainter({required this.y, required this.left, required this.right});
+
+  final double y;
+  final double left;
+  final double right;
 
   @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final cutoutSide = size.width * 0.70;
+  void paint(Canvas canvas, Size size) {
+    // Center light: a soft horizontal glow + a bright core line
+    final core =
+        Paint()
+          ..color = AppColors.primary
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke;
 
-    return Stack(
-      children: [
-        // Darkened layer with transparent square (srcOut trick)
-        ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.55),
-            BlendMode.srcOut,
-          ),
-          child: Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: cutoutSide,
-                  height: cutoutSide,
-                  decoration: const BoxDecoration(
-                    color: Colors.black, // required for srcOut
-                    borderRadius: BorderRadius.all(Radius.circular(18)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+    // Soft glow using a gradient stroke effect by drawing multiple lines
+    final glow =
+        Paint()
+          ..color = AppColors.primary.withOpacity(0.12)
+          ..strokeWidth = 10
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
 
-        // White border around cutout
-        Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: cutoutSide,
-            height: cutoutSide,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(18)),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.9),
-                width: 2,
-              ),
-            ),
-          ),
-        ),
-
-        // Title and hint
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 24,
-          left: 0,
-          right: 0,
-          child: Column(
-            children: [
-              const Text(
-                'Scan QR Code',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Align the code within the frame',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.85),
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    // Glow
+    canvas.drawLine(Offset(left, y), Offset(right, y), glow);
+    // Core line
+    canvas.drawLine(Offset(left, y), Offset(right, y), core);
   }
-}
-
-class _RoundButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _RoundButton({required this.icon, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return InkResponse(
-      onTap: onTap,
-      radius: 32,
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withOpacity(0.7), width: 1),
-        ),
-        child: Icon(icon, color: Colors.white, size: 26),
-      ),
-    );
-  }
+  bool shouldRepaint(covariant _LaserPainter oldDelegate) =>
+      oldDelegate.y != y ||
+      oldDelegate.left != left ||
+      oldDelegate.right != right;
 }
