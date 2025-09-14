@@ -4,7 +4,7 @@ class AppPref {
   static final AppPref _appPreference = AppPref._internal();
 
   factory AppPref() {
-    return _appPreference;
+    return _appPreference; 
   }
 
   AppPref._internal();

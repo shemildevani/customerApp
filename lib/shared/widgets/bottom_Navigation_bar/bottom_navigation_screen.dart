@@ -1,6 +1,7 @@
 import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:customer_app/screens/favourite_screen/favourite_screen.dart';
 import 'package:customer_app/screens/home_screen/home_screen.dart';
+import 'package:customer_app/screens/offer_screen/offer_screen.dart';
 import 'package:customer_app/screens/profile_screen/profile_screen.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -156,7 +157,7 @@ class BottomNavigationScreen extends StatelessWidget {
 
     final List<Widget> screens = [
       HomeScreen(),
-      SecondScreen(),
+      OfferScreen(),
       FavouriteScreen(),
       ProfileScreen(),
     ];
@@ -170,6 +171,7 @@ class BottomNavigationScreen extends StatelessWidget {
             highlightColor: Colors.transparent,
           ),
           child: BottomNavigationBar(
+            
             currentIndex: cnt.selectedIndex.value,
             backgroundColor: AppColors.white,
             onTap: (index) {
@@ -195,18 +197,18 @@ class BottomNavigationScreen extends StatelessWidget {
                 isSelected: cnt.selectedIndex.value == 0,
               ),
               buildBottomNavigationBarItem(
-                icondata: FontAwesomeIcons.capsules,
-                label: 'Remedy',
+                icondata: FontAwesomeIcons.tags,
+                label: 'Offers',
                 isSelected: cnt.selectedIndex.value == 1,
               ),
               buildBottomNavigationBarItem(
                 icondata: FontAwesomeIcons.heart,
-                label: 'Patient',
+                label: 'Favourites',
                 isSelected: cnt.selectedIndex.value == 2,
               ),
               buildBottomNavigationBarItem(
                 icondata: FontAwesomeIcons.user,
-                label: 'Favorite',
+                label: 'Profile',
                 isSelected: cnt.selectedIndex.value == 3,
               ),
             ],

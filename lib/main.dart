@@ -1,9 +1,12 @@
 import 'package:customer_app/config/theme/theme.dart';
+import 'package:customer_app/preferences/app_preferences.dart';
 import 'package:customer_app/screens/auth/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async{
+    WidgetsFlutterBinding.ensureInitialized();
+  await AppPref().initialAppPreference();
   runApp(const MyApp());
 }
 

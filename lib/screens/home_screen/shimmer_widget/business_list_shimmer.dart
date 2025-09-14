@@ -12,15 +12,15 @@ class BusinessListShimmerLoader extends StatelessWidget {
       child: ListView.builder(
         itemCount: 5, // Adjust the count based on your needs
         itemBuilder: (context, index) {
-          return SimpleShimmerBusinessCard();
+          return ShimmerBusinessCard();
         },
       ),
     );
   }
 }
 
-class SimpleShimmerBusinessCard extends StatelessWidget {
-  const SimpleShimmerBusinessCard({super.key});
+class ShimmerBusinessCard extends StatelessWidget {
+  const ShimmerBusinessCard({super.key});
 
   @override
   Widget build(BuildContext context) {

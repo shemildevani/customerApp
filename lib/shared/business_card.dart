@@ -176,17 +176,19 @@ class BusinessCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    height: 84,
-                    width: 84,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image:
-                            isOpen
-                                ? imageProvider
-                                : AssetImage(closedShopImage),
-                        fit: BoxFit.contain,
+                  Banner(
+                    location: BannerLocation.topStart,
+                    message: 'CLOSED',
+                    color: AppColors.error,
+                    child: Container(
+                      height: 84,
+                      width: 84,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
@@ -292,8 +294,3 @@ class BusinessCard extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
