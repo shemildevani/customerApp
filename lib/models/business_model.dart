@@ -20,6 +20,7 @@ class BusinessModel {
   final double ratings;
   final bool isOpen;
   final bool isVerified;
+  final List<String>? sellerAccountLinks;
   final List<UserModel>? businessOwners;
   final List<DayTiming>? businessTimings;
   final String? businessUpiId;
@@ -44,6 +45,7 @@ class BusinessModel {
     this.isVerified = false,
     this.businessOwners,
     this.businessUpiId,
+    this.sellerAccountLinks,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic> json) {
@@ -73,6 +75,10 @@ class BusinessModel {
               ?.map((e) => UserModel.fromOwnerJson(e as Map<String, dynamic>))
               .toList(),
       businessUpiId: json['businessUpiId'],
+      sellerAccountLinks:
+          (json['sellerAccountLinks'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
     );
   }
 

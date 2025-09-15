@@ -11,13 +11,16 @@ import 'package:customer_app/screens/business_screen/widgets/business_owner_sect
 import 'package:customer_app/screens/business_screen/widgets/business_website.dart';
 import 'package:customer_app/screens/business_screen/widgets/ongoing_offers_card.dart';
 import 'package:customer_app/screens/business_screen/widgets/opening_hour_widget.dart';
+import 'package:customer_app/shared/widgets/app_snackbar.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:customer_app/shared/widgets/business_open_closed_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BusinessScreen extends StatefulWidget {
   const BusinessScreen({super.key});
@@ -303,6 +306,19 @@ class _CoreInfoSection extends StatelessWidget {
                 label: "Mail",
                 color: Colors.pinkAccent,
                 onTap: () {},
+              ),
+              _SocialButton(
+                // ignore: deprecated_member_use
+                icon: FontAwesomeIcons.bank,
+                label: "UPI ID",
+                color: Colors.deepPurple,
+                onTap: () async {
+                  final String upiId =
+                      "yourupiid@upi"; // 👈 your business UPI ID
+                  Clipboard.setData(ClipboardData(text: upiId));
+                  showAppSnackBar( "UPI ID copied to clipboard");
+                  
+                },
               ),
             ],
           ),
@@ -603,15 +619,14 @@ class _FollowButton extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: cnt.isFollowed.value
-                    ? AppColors.primary
-                    : AppColors.transparent,
+                color:
+                    cnt.isFollowed.value
+                        ? AppColors.primary
+                        : AppColors.transparent,
                 width: 1.5,
               ),
               borderRadius: BorderRadius.circular(12),
-              color: cnt.isFollowed.value
-                  ? AppColors.white
-                  : AppColors.primary,
+              color: cnt.isFollowed.value ? AppColors.white : AppColors.primary,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             child: Row(

@@ -38,39 +38,70 @@ class OfferScreen extends StatelessWidget {
                   children: [
                     AppSpacing.h12,
                     // offer banner
-                    Container(
-                      height: 180,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/offer.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: AppText(
-                                text: 'Ends in 5 Days',
-                                color: Colors.white,
-                                fontSize: AppFontSize.s14,
-                                fontWeight: appBoldFont,
+                    SizedBox(
+                      height: 170,
+                      child: ListView.builder(
+                        itemCount: 5,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true, 
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: MediaQuery.sizeOf(context).width - 80,
+                            margin: EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/offer.jpg'),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                          ),
-                        ],
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.6),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: AppText(
+                                      text: 'Ends in 5 Days',
+                                      color: Colors.white,
+                                      fontSize: AppFontSize.s14,
+                                      fontWeight: appBoldFont,
+                                    ),
+                                  ),
+                                ),
+
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.6),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: AppText(
+                                      text: 'Navaratri Offer',
+                                      color: Colors.white,
+                                      fontSize: AppFontSize.s14,
+                                      fontWeight: appBoldFont,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                     // business details
