@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class ProfileScreenCnt extends GetxController {
-  RxBool isShopOpen = true.obs;
+  RxBool isNotificationOn = true.obs;
   var isLoading = false.obs;
 
   void toggleLoading() {

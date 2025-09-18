@@ -5,6 +5,7 @@ import 'package:customer_app/config/utils/app_padding.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
 import 'package:customer_app/screens/auth/login/login_screen.dart';
 import 'package:customer_app/screens/data_collection/user_data/user_data_screen.dart';
+import 'package:customer_app/screens/profile_screen/profile_screen_cnt.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
 import 'package:customer_app/shared/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ProfileScreenCnt cnt = Get.put(ProfileScreenCnt());
+    ProfileScreenCnt cnt = Get.put(ProfileScreenCnt());
     return Scaffold(
       appBar: buildAppBar(
         title: 'Profile',
@@ -33,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
               // details section
               AppSpacing.h20,
               Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
+                // padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
 
@@ -55,11 +56,78 @@ class ProfileScreen extends StatelessWidget {
                         Get.to(() => UserDataScreen());
                       },
                     ),
-                    Divider(),
+
+                    Obx(
+                      () => Material(
+                        color: AppColors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            cnt.isNotificationOn.value =
+                                !cnt.isNotificationOn.value;
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 4,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color:
+                                          // ignore: deprecated_member_use
+                                          AppColors.primary.withOpacity(0.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.notifications_outlined,
+                                          color: AppColors.primary,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      AppSpacing.w16,
+                                      AppText(
+                                        text: 'Notifications',
+                                        fontSize: AppFontSize.s14,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Switch(
+                                  value: cnt.isNotificationOn.value,
+                                  activeThumbColor: AppColors.white,
+                                  activeTrackColor: AppColors.green,
+                                  inactiveThumbColor: AppColors.white,
+
+                                  // ignore: deprecated_member_use
+                                  inactiveTrackColor: AppColors.grey.withOpacity(
+                                    0.6,
+                                  ),
+                                  onChanged:
+                                      (value) =>
+                                          cnt.isNotificationOn.value = value,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      decoration: BoxDecoration(color: AppColors.grey1),
+                    ),
+
                     buildProfileOption(
                       icon: Icons.logout,
                       title: 'Logout',
                       color: AppColors.red,
+                      isRequiredLine: false,
                       onTap: () {
                         Get.offAll(LoginScreen());
                       },
@@ -80,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
               AppSpacing.h10,
 
               Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
+                // padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   boxShadow: [
@@ -99,23 +167,24 @@ class ProfileScreen extends StatelessWidget {
                       title: 'Help Center',
                       onTap: () {},
                     ),
-                    Divider(),
+
                     buildProfileOption(
                       icon: Icons.privacy_tip_outlined,
                       title: 'Privacy & Policy',
                       onTap: () {},
                     ),
-                    Divider(),
+
                     buildProfileOption(
                       icon: Icons.description_outlined,
                       title: 'Terms & Conditions',
                       onTap: () {},
                     ),
-                    Divider(),
+
                     buildProfileOption(
                       icon: Icons.star_outline,
                       title: 'Rate Us',
                       onTap: () {},
+                      isRequiredLine: false,
                     ),
                   ],
                 ),
@@ -133,40 +202,62 @@ class ProfileScreen extends StatelessWidget {
     required VoidCallback onTap,
     double? size,
     Color? color,
+    bool isRequiredLine = true,
   }) {
     return Material(
       color: AppColors.transparent,
-      child: ListTile(
-        leading: Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            // ignore: deprecated_member_use
-            color:
-                color != null
-                    // ignore: deprecated_member_use
-                    ? color.withOpacity(0.1)
-                    // ignore: deprecated_member_use
-                    : AppColors.primary.withOpacity(0.1),
-            shape: BoxShape.circle,
+      child: Column(
+        children: [
+          ListTile(
+            shape:
+                isRequiredLine
+                    ? null
+                    : RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16),
+                      ),
+                    ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+            leading: Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                // ignore: deprecated_member_use
+                color:
+                    color != null
+                        // ignore: deprecated_member_use
+                        ? color.withOpacity(0.1)
+                        // ignore: deprecated_member_use
+                        : AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: color ?? AppColors.primary,
+                size: size ?? 24,
+              ),
+            ),
+            title: AppText(
+              text: title,
+              fontSize: AppFontSize.s14,
+              textAlign: TextAlign.start,
+              color: color,
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: color ?? AppColors.grey2,
+            ),
+            onTap: onTap,
           ),
-          child: Icon(
-            icon,
-            color: color ?? AppColors.primary,
-            size: size ?? 24,
-          ),
-        ),
-        title: AppText(
-          text: title,
-          fontSize: AppFontSize.s14,
-          textAlign: TextAlign.start,
-          color: color,
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: color ?? AppColors.grey2,
-        ),
-        onTap: onTap,
+          if (isRequiredLine) ...[
+            AppSpacing.h4,
+            Container(
+              height: 1,
+              decoration: BoxDecoration(color: AppColors.grey1),
+            ),
+          ],
+        ],
       ),
     );
   }
