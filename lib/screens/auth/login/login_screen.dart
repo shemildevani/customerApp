@@ -85,16 +85,11 @@ class LoginScreen extends StatelessWidget {
                           color: AppColors.black,
                           fontWeight: appMediumFont,
                         ),
-
                         cursorColor: AppColors.primary,
                         textInputAction: TextInputAction.done,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         initialValue: '+${cnt.countryDialCode.value}',
                         controller: cnt.phoneNumberController,
-
-                        onCountryChanged: (value) {
-                          cnt.countryDialCode.value = value.dialCode;
-                        },
                         invalidNumberMessage: 'Invalid phone number',
                         validator: (value) {
                           if (value == null || value.number.isEmpty) {

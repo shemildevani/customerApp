@@ -1,3 +1,4 @@
+import 'package:customer_app/shared/widgets/app_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/config/app_color/app_color.dart';
 
@@ -41,14 +42,7 @@ class AppButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         child:
             isLoading
-                ? const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-                  ),
-                )
+                ? appLoading()
                 : Text(
                   text,
                   textAlign: TextAlign.center,

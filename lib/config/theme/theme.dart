@@ -9,12 +9,13 @@ mixin AppTheme {
     // fontFamily: 'DMSans',
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
+    
     // applyElevationOverlayColor: true,
     // secondaryHeaderColor: AppColors.red,
-    scaffoldBackgroundColor: AppColors.white,
+    scaffoldBackgroundColor: Color.fromRGBO(245, 245, 245, 1),
     // splashColor: AppColors.grey1,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.white,
+      backgroundColor: Color.fromRGBO(245, 245, 245, 1),
       surfaceTintColor: Colors.transparent,
       iconTheme: IconThemeData(color: AppColors.black),
       elevation: 0,

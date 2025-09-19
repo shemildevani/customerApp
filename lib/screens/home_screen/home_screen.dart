@@ -7,6 +7,7 @@ import 'package:customer_app/config/utils/app_spacing.dart';
 import 'package:customer_app/screens/business_screen/business_screen.dart';
 import 'package:customer_app/screens/home_screen/home_screen_cnt.dart';
 import 'package:customer_app/screens/home_screen/shimmer_widget/business_list_shimmer.dart';
+import 'package:customer_app/screens/notification_screen/notification_screen.dart';
 import 'package:customer_app/screens/qr_code_scanner/qr_code_scanner_screen.dart';
 import 'package:customer_app/shared/business_card.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends StatelessWidget {
         action: [
           IconButton(
             onPressed: () {
-              cnt.getBusinessList();
+              Get.to(() => NotificationScreen());
             },
             icon: Icon(Icons.notifications_none, color: AppColors.primary),
           ),

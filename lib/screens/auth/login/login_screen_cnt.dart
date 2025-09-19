@@ -4,7 +4,7 @@ import 'package:customer_app/screens/auth/otp/otp_screen.dart';
 
 class LoginScreenCnt extends GetxController {
   final phoneNumberController = TextEditingController();
-  final countryDialCode = ''.obs;
+  final countryDialCode = '91'.obs;
   final isLoading = false.obs;
 
   @override

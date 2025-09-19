@@ -20,7 +20,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BusinessScreen extends StatefulWidget {
   const BusinessScreen({super.key});
@@ -36,9 +35,10 @@ class _BusinessScreenState extends State<BusinessScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(
-        title: 'Business Preview',
+        title: 'Business Name',
         action: [
           IconButton(
+            // ignore: deprecated_member_use
             onPressed: () async => Share.share('https://www.mystore.com'),
             icon: const Icon(Icons.share),
           ),
@@ -110,57 +110,12 @@ class _OngoingOffersSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: AppColors.white,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withOpacity(0.06),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: AppText(
-                text: "Ongoing Offers",
-                fontWeight: appBoldFont,
-                fontSize: AppFontSize.s18,
-              ),
-            ),
-            AppSpacing.h6,
-            SizedBox(
-              height: 130,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder:
-                    (context, index) => Padding(
-                      padding: EdgeInsets.only(
-                        left: index == 0 ? 12 : 6,
-                        right: index == 2 ? 12 : 6,
-                      ),
-                      child: OfferCard(
-                        title: 'Summer Sale ${index + 1}',
-                        subtitle: 'Flat 30% OFF on all T-Shirts',
-                        discountText: '30% OFF',
-                        validText: 'Valid till 30 Sep',
-                        imageAsset: 'assets/images/banner.jpg',
-                      ),
-                    ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return OfferCard(
+      title: 'Summer Sale',
+      subtitle: 'Flat 30% OFF on all T-Shirts',
+      discountText: '30% OFF',
+      validText: 'Valid till 30 Sep',
+      imageAsset: 'assets/images/banner.jpg',
     );
   }
 }
@@ -316,8 +271,7 @@ class _CoreInfoSection extends StatelessWidget {
                   final String upiId =
                       "yourupiid@upi"; // 👈 your business UPI ID
                   Clipboard.setData(ClipboardData(text: upiId));
-                  showAppSnackBar( "UPI ID copied to clipboard");
-                  
+                  showAppSnackBar("UPI ID copied to clipboard");
                 },
               ),
             ],

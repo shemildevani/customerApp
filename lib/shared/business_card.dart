@@ -179,7 +179,7 @@ class BusinessCard extends StatelessWidget {
                   Banner(
                     location: BannerLocation.topStart,
                     message: 'CLOSED',
-                    color: AppColors.error,
+                    color: Colors.red.shade900,
                     child: Container(
                       height: 84,
                       width: 84,
