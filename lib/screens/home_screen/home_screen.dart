@@ -24,12 +24,44 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(
         title: 'Followed Business',
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Container(
+            padding: EdgeInsets.only(left: 16, right: 6, bottom: 10),
+            height: 50,
+            child: ListView.builder(
+              itemCount: categoriesList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Obx(() {
+                  // ignore: unrelated_type_equality_checks
+                  final bool isSelected = cnt.selectedIndex == index;
+                  return ListItemDesign(
+                    title: categoriesList[index],
+                    isSelected: isSelected,
+                    onTap: () {
+                      cnt.selectedIndex.value = index;
+                    },
+                  );
+                });
+              },
+            ),
+          ),
+        ),
         action: [
-          IconButton(
-            onPressed: () {
+          InkWell(
+            borderRadius: BorderRadius.circular(50),
+            onTap: () {
               Get.to(() => NotificationScreen());
             },
-            icon: Icon(Icons.notifications_none, color: AppColors.primary),
+            child: Container(
+              padding: EdgeInsets.all(6),
+              child: Badge(
+                label: Text('3'),
+                backgroundColor: AppColors.primary,
+                child: Icon(Icons.notifications_none, color: AppColors.primary),
+              ),
+            ),
           ),
           IconButton(
             onPressed: () {
@@ -40,43 +72,19 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            AppSpacing.h12,
-            Container(
-              padding: EdgeInsets.only(left: 16, right: 6),
-              height: 40,
-              child: ListView.builder(
-                itemCount: categoriesList.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Obx(() {
-                    // ignore: unrelated_type_equality_checks
-                    final bool isSelected = cnt.selectedIndex == index;
-                    return ListItemDesign(
-                      title: categoriesList[index],
-                      isSelected: isSelected,
-                      onTap: () {
-                        cnt.selectedIndex.value = index;
-                      },
-                    );
-                  });
-                },
-              ),
-            ),
-
-            AppSpacing.h12,
-            Expanded(
-              child: Padding(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              AppSpacing.h12,
+              Padding(
                 padding: AppPadding.horizontal16,
-
                 child: Obx(() {
                   if (cnt.isLoading.value) {
                     return BusinessListShimmerLoader();
                   }
                   return CustomScrollView(
                     shrinkWrap: true,
-
+                    physics: NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
@@ -98,8 +106,8 @@ class HomeScreen extends StatelessWidget {
                   );
                 }),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -125,7 +133,8 @@ class ListItemDesign extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(12),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : AppColors.grey,
             borderRadius: BorderRadius.circular(12),

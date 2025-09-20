@@ -270,7 +270,7 @@ class _CoreInfoSection extends StatelessWidget {
                 onTap: () async {
                   final String upiId =
                       "yourupiid@upi"; // 👈 your business UPI ID
-                  Clipboard.setData(ClipboardData(text: upiId));
+                  Clipboard.setData(ClipboardData(text: upiId,));
                   showAppSnackBar("UPI ID copied to clipboard");
                 },
               ),

@@ -14,10 +14,11 @@ mixin AppTheme {
     // secondaryHeaderColor: AppColors.red,
     scaffoldBackgroundColor: Color.fromRGBO(245, 245, 245, 1),
     // splashColor: AppColors.grey1,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+    appBarTheme:  AppBarTheme(
+      backgroundColor: AppColors.appBgColor,
       surfaceTintColor: Colors.transparent,
       iconTheme: IconThemeData(color: AppColors.black),
+      shape: Border(bottom: BorderSide(color: AppColors.grey1)),
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(

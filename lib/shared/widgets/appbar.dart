@@ -9,6 +9,8 @@ AppBar buildAppBar({
   IconThemeData? actionsIconTheme,
   Color? backgroundColor,
   bool isRequiredLeading = false,
+  PreferredSizeWidget? bottom,
+  double? toolbarHeight,
 }) {
   return AppBar(
     iconTheme: IconThemeData(color: AppColors.black),
@@ -26,7 +28,10 @@ AppBar buildAppBar({
     backgroundColor: backgroundColor,
     centerTitle: centerTitle,
     actions: action,
+    toolbarHeight: toolbarHeight,
     automaticallyImplyLeading: true,
+    bottom: bottom,
+    
     actionsIconTheme:
         actionsIconTheme ?? const IconThemeData(color: AppColors.primary),
   );

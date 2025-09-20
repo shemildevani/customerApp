@@ -1,11 +1,9 @@
 // 1) Reusable business card
 import 'package:customer_app/config/app_color/app_color.dart';
-import 'package:customer_app/config/app_constant/app_assets.dart';
 import 'package:customer_app/config/app_constant/app_constant.dart';
 import 'package:customer_app/config/app_constant/app_font_size.dart';
 import 'package:customer_app/config/utils/app_spacing.dart';
 import 'package:customer_app/shared/widgets/app_text.dart';
-import 'package:customer_app/shared/widgets/business_open_closed_status.dart';
 import 'package:flutter/material.dart';
 
 // class BusinessCard extends StatelessWidget {
@@ -167,123 +165,134 @@ class BusinessCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
+            color: AppColors.white,
             border: Border.all(color: AppColors.grey1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Stack(
             children: [
-              Row(
-                children: [
-                  Banner(
-                    location: BannerLocation.topStart,
-                    message: 'CLOSED',
-                    color: Colors.red.shade900,
-                    child: Container(
-                      height: 84,
-                      width: 84,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.contain,
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Banner(
+                      location: BannerLocation.topStart,
+                      message: 'CLOSED',
+                      color: Colors.red.shade900,
+                      child: Container(
+                        height: 84,
+                        width: 84,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  AppSpacing.w12,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppText(
-                          text: 'm2m',
-                          textAlign: TextAlign.start,
-                          fontSize: AppFontSize.s16,
-                          softWrap: true,
-                          fontWeight: appBoldFont,
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                        ),
-                        // BusinessOpenClosedStatus(
-                        //   isOpen: isOpen,
-                        //   fontSize: AppFontSize.s10,
-                        // ),
-                        AppSpacing.h6,
+                    AppSpacing.w12,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * .5,
+                            child: AppText(
+                              text: 'Khodiyar Fashion',
+                              textAlign: TextAlign.start,
+                              fontSize: AppFontSize.s16,
+                              softWrap: true,
+                              fontWeight: appBoldFont,
+                              maxLines: 2,
+                              overFlow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // BusinessOpenClosedStatus(
+                          //   isOpen: isOpen,
+                          //   fontSize: AppFontSize.s10,
+                          // ),
+                          AppSpacing.h6,
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.category_outlined,
-                              size: 18,
-                              color: AppColors.primary,
-                            ),
-                            AppSpacing.w4,
-                            AppText(
-                              text: 'Fashion',
-                              fontSize: AppFontSize.s12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ],
-                        ),
-                        AppSpacing.h6,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.location_on_outlined,
-                              size: 18,
-                              color: AppColors.primary,
-                            ),
-                            AppSpacing.w4,
-                            AppText(
-                              text: 'Varachha',
-                              fontSize: AppFontSize.s12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ],
-                        ),
-                        AppSpacing.h6,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.star_rounded,
-                              size: 18,
-                              color: Colors.amber,
-                            ),
-                            AppSpacing.w4,
-                            AppText(
-                              text: rating.toStringAsFixed(1),
-                              fontSize: AppFontSize.s12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ],
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.category_outlined,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              AppSpacing.w4,
+                              AppText(
+                                text: 'Fashion',
+                                fontSize: AppFontSize.s12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ],
+                          ),
+                          AppSpacing.h6,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.location_on_outlined,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              AppSpacing.w4,
+                              AppText(
+                                text: 'Varachha Surat',
+                                fontSize: AppFontSize.s12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ],
+                          ),
+                          AppSpacing.h6,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                size: 18,
+                                color: Colors.amber,
+                              ),
+                              AppSpacing.w4,
+                              AppText(
+                                text: rating.toStringAsFixed(1),
+                                fontSize: AppFontSize.s12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               Positioned(
-                bottom: 0,
-                right: 0,
-                child: InkWell(
+                top: 10,
+                right: 10,
+                child: Material(
+                  color: AppColors.appBgColor,
                   borderRadius: BorderRadius.circular(50),
 
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(50),
+
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child:
+                          isFavourite
+                              ? Icon(Icons.favorite, color: Colors.pink)
+                              : Icon(Icons.favorite_border_outlined),
                     ),
-                    child:
-                        isFavourite
-                            ? Icon(Icons.favorite, color: Colors.pink)
-                            : Icon(Icons.favorite_border_outlined),
                   ),
                 ),
               ),

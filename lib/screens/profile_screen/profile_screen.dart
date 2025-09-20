@@ -105,9 +105,72 @@ class ProfileScreen extends StatelessWidget {
                                   inactiveThumbColor: AppColors.white,
 
                                   // ignore: deprecated_member_use
-                                  inactiveTrackColor: AppColors.grey.withOpacity(
-                                    0.6,
+                                  inactiveTrackColor: AppColors.grey
+                                      .withOpacity(0.6),
+                                  onChanged:
+                                      (value) =>
+                                          cnt.isNotificationOn.value = value,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      decoration: BoxDecoration(color: AppColors.grey1),
+                    ),
+                    Obx(
+                      () => Material(
+                        color: AppColors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            cnt.isNotificationOn.value =
+                                !cnt.isNotificationOn.value;
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 4,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color:
+                                          // ignore: deprecated_member_use
+                                          AppColors.primary.withOpacity(0.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.mode_night_outlined,
+                                          color: AppColors.primary,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      AppSpacing.w16,
+                                      AppText(
+                                        text: 'Dark Mode',
+                                        fontSize: AppFontSize.s14,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
                                   ),
+                                ),
+                                Switch(
+                                  value: cnt.isNotificationOn.value,
+                                  activeThumbColor: AppColors.white,
+                                  activeTrackColor: AppColors.green,
+                                  inactiveThumbColor: AppColors.white,
+
+                                  // ignore: deprecated_member_use
+                                  inactiveTrackColor: AppColors.grey
+                                      .withOpacity(0.6),
                                   onChanged:
                                       (value) =>
                                           cnt.isNotificationOn.value = value,
